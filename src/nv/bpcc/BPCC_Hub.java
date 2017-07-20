@@ -1,32 +1,44 @@
 /**
- *  This class contains any values, variables, and methods which may be used in a static context by other classes in the application.
+ *  This class is the main GUI hub and driver of the application.
+ *  Users will have to login as either a guest (no credentials) or as an admin (requiring username/password)
  */
 
 package nv.bpcc;
 
-public class BPCC_Util {
+import javax.swing.SwingUtilities;
+
+public class BPCC_Hub {
 	
 	//-----------------------------------------------------------------//
 	
 	/** Declare and initialize final variables **/
 	
-	private final String classNameForLogger = this.getClass().getName().toString();
-	
-	private final static String versionNumber = "0.1.0";
-	
-	//-----------------------------------------------------------------//
-	
-	/** Declare static fields **/
-	
 	
 	
 	//-----------------------------------------------------------------//
 	
-	/** Initialize static fields **/
+	/** Declare global variables **/
 	
-	protected static void initStaticFields() {
-		// TODO:  Call from the beginning of BPCC_Hub.
+	
+	
+	//-----------------------------------------------------------------//
+	
+	/** Initialize global variables **/
+	
+	private void initVars() {
 		
+	}
+	
+	//-----------------------------------------------------------------//
+	
+	/** Main method and class declaration/initialization **/
+	
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				new BPCC_Hub().start();
+			}
+		});
 	}
 	
 	//-----------------------------------------------------------------//
@@ -43,15 +55,15 @@ public class BPCC_Util {
 	
 	//-----------------------------------------------------------------//
 	
-	/** Accessor methods **/
+	/** Create and manage GUI components **/
 	
-	public static String getVersionNumber() {
-		return versionNumber;
+	private void createAndShowGUI() {
+		
 	}
 	
 	//-----------------------------------------------------------------//
 	
-	/** Mutator methods **/
+	/** Event handlers **/
 	
 	
 	
@@ -65,7 +77,10 @@ public class BPCC_Util {
 	
 	/** Private methods **/
 	
-	
+	private void start() {
+		initVars();
+		createAndShowGUI();
+	}
 	
 	//-----------------------------------------------------------------//
 	
