@@ -4,13 +4,15 @@
 
 package nv.bpcc;
 
+import java.lang.invoke.MethodHandles;
+
 public class BPCC_Tester {
 	
 	//-----------------------------------------------------------------//
 	
 	/** Declare and initialize final variables **/
 	
-	private final String classStringForLogger = this.getClass().getName().toString();
+	private final String classStringForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
 	//-----------------------------------------------------------------//
 	
@@ -67,19 +69,7 @@ public class BPCC_Tester {
 		initVars();
 		
 		// TODO:  Test block.
-		BPCC_Logger.logBasicMessage(classStringForLogger, "Logged a message!");
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		BPCC_Logger.logBasicMessage(classStringForLogger, "Logged another message!");
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		BPCC_Logger.logErrorMessage(classStringForLogger, "Logged an error message!", "Null");
+		
 		// TODO:  Test block.
 	}
 		

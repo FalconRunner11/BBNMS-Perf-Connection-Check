@@ -9,6 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.invoke.MethodHandles;
 
 import org.joda.time.DateTime;
 
@@ -20,9 +22,12 @@ public class BPCC_Logger {
 	
 	/** Declare and initialize final variables **/
 	
-	private final String classNameForLogger = this.getClass().getName().toString();
+	private final static String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
 	private final static String logFile = "bpcc.log";
+	
+	private final static String fatalErrorMessageString = "Application closed due to a fatal error";
+	private final static String fatalErrorTypeString = "Fatal error";
 	
 	//-----------------------------------------------------------------//
 	
@@ -70,7 +75,7 @@ public class BPCC_Logger {
 		try {
 			new PrintWriter(logFile).close();
 		} catch (FileNotFoundException e) {
-			// TODO:  Exception handling.
+			BPCC_Logger.logExceptionMessage(classNameForLogger, e, -1);
 		}
 	}
 	
@@ -81,7 +86,7 @@ public class BPCC_Logger {
 		}
 	}
 	
-	protected static void logErrorMessage(String inc_class, String inc_errorMessage, String inc_errorType) {
+	protected static void logErrorMessage(String inc_class, String inc_errorMessage, String inc_errorType, int inc_errorCode) {
 		// Always log error messages regardless of logging level.
 		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.ERROR) {
 			writeToLog(inc_class, inc_errorMessage);
@@ -89,18 +94,28 @@ public class BPCC_Logger {
 		
 		// TODO:  Initiate error dialog box.
 		
-		// TODO:  Handle application shutdown errors.
+		// Handle application shutdown errors.
+		if (inc_errorCode == -1) {
+			BPCC_Logger.logErrorMessage(inc_class, fatalErrorMessageString, fatalErrorTypeString, 0);
+			System.exit(-1);
+		}
 	}
 	
-	protected static void logExceptionMessage(String inc_class, String inc_exceptionMessage) {
+	protected static void logExceptionMessage(String inc_class, Exception inc_exception, int inc_errorCode) {
 		// Always log exception messages regardless of logging level.
 		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.ERROR) {
-			writeToLog(inc_class, inc_exceptionMessage);
+			StringWriter sw = new StringWriter();
+			inc_exception.printStackTrace(new PrintWriter(sw));
+			writeToLog(inc_class, sw.toString());
 		}
 		
 		// TODO:  Initiate error dialog box.
 		
-		// TODO:  Handle application shutdown errors.
+		// Handle application shutdown errors.
+		if (inc_errorCode == -1) {
+			BPCC_Logger.logErrorMessage(inc_class, fatalErrorMessageString, fatalErrorTypeString, 0);
+			System.exit(-1);
+		}
 	}
 	
 	//-----------------------------------------------------------------//
@@ -121,12 +136,12 @@ public class BPCC_Logger {
 			outStream.write(formattedMessageText);
 			outStream.newLine();
 		} catch (IOException e) {
-			// TODO:  Exception handling.
+			BPCC_Logger.logExceptionMessage(classNameForLogger, e, -1);
 		} finally {
 			try {
 				outStream.close();
 			} catch (IOException e) {
-				// TODO:  Exception handling.
+				BPCC_Logger.logExceptionMessage(classNameForLogger, e, -1);
 			}
 		}
 	}

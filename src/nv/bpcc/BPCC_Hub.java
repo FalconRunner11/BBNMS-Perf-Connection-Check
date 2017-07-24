@@ -5,6 +5,8 @@
 
 package nv.bpcc;
 
+import java.lang.invoke.MethodHandles;
+
 import javax.swing.SwingUtilities;
 
 public class BPCC_Hub {
@@ -13,7 +15,7 @@ public class BPCC_Hub {
 	
 	/** Declare and initialize final variables **/
 	
-	
+	private final static String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
 	//-----------------------------------------------------------------//
 	

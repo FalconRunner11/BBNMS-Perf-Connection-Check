@@ -4,6 +4,8 @@
 
 package nv.bpcc;
 
+import java.lang.invoke.MethodHandles;
+
 public class BPCC_Util {
 	
 	//-----------------------------------------------------------------//
@@ -16,7 +18,7 @@ public class BPCC_Util {
 	
 	/** Declare and initialize final variables **/
 	
-	private final String classNameForLogger = this.getClass().getName().toString();
+	private final String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
 	private final static String versionNumber = "0.1.0";
 	
