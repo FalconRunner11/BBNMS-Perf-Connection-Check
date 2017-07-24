@@ -8,6 +8,12 @@ public class BPCC_Util {
 	
 	//-----------------------------------------------------------------//
 	
+	/** Declare enums **/
+	
+	protected enum LogLevelEnum {ERROR, DEBUG};
+	
+	//-----------------------------------------------------------------//
+	
 	/** Declare and initialize final variables **/
 	
 	private final String classNameForLogger = this.getClass().getName().toString();
@@ -18,7 +24,7 @@ public class BPCC_Util {
 	
 	/** Declare static fields **/
 	
-	
+	private static LogLevelEnum logLevel;
 	
 	//-----------------------------------------------------------------//
 	
@@ -26,7 +32,7 @@ public class BPCC_Util {
 	
 	protected static void initStaticFields() {
 		// TODO:  Call from the beginning of BPCC_Hub.
-		
+		logLevel = LogLevelEnum.DEBUG;
 	}
 	
 	//-----------------------------------------------------------------//
@@ -45,15 +51,21 @@ public class BPCC_Util {
 	
 	/** Accessor methods **/
 	
-	public static String getVersionNumber() {
+	protected static String getVersionNumber() {
 		return versionNumber;
+	}
+	
+	protected static LogLevelEnum getLogLevel() {
+		return logLevel;
 	}
 	
 	//-----------------------------------------------------------------//
 	
 	/** Mutator methods **/
 	
-	
+	protected static void setLogLevel(LogLevelEnum inc_logLevel) {
+		logLevel = inc_logLevel;
+	}
 	
 	//-----------------------------------------------------------------//
 	

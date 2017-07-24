@@ -57,20 +57,29 @@ public class BPCC_Tester {
 	/** Private methods **/
 	
 	private void start() {
+		// Initialize application static fields.
+		BPCC_Util.initStaticFields();
+		
 		// Clear the log file.
 		BPCC_Logger.clearLogFile();
 		
+		// Initialize class global variables.
 		initVars();
 		
 		// TODO:  Test block.
-		BPCC_Logger.logMessage(classStringForLogger, "Logged a message!");
+		BPCC_Logger.logBasicMessage(classStringForLogger, "Logged a message!");
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		BPCC_Logger.logMessage(classStringForLogger, "Logged another message!");
+		BPCC_Logger.logBasicMessage(classStringForLogger, "Logged another message!");
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		BPCC_Logger.logErrorMessage(classStringForLogger, "Logged an error message!", "Null");
 		// TODO:  Test block.
 	}
 		

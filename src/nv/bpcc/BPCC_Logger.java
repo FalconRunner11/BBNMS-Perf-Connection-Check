@@ -12,9 +12,9 @@ import java.io.PrintWriter;
 
 import org.joda.time.DateTime;
 
+import nv.bpcc.BPCC_Util.LogLevelEnum;		// Import this enum from the BPCC_Util class for shorter references to its values.
+
 public class BPCC_Logger {
-	
-	private enum Level {ERROR, DEBUG};
 	
 	//-----------------------------------------------------------------//
 	
@@ -28,16 +28,14 @@ public class BPCC_Logger {
 	
 	/** Declare static fields **/
 	
-	private static Level logLevel;
 	
-	private static DateTime timestamp;
 	
 	//-----------------------------------------------------------------//
 	
 	/** Initialize static fields **/
 	
 	protected static void initStaticFields() {
-		logLevel = Level.DEBUG;
+		
 	}
 	
 	//-----------------------------------------------------------------//
@@ -76,26 +74,51 @@ public class BPCC_Logger {
 		}
 	}
 	
-	protected static void logMessage(String inc_class, String inc_standardLogMessage) {
-		writeToLog(inc_class, inc_standardLogMessage);
+	protected static void logBasicMessage(String inc_class, String inc_basicMessageText) {
+		// Only log basic messages when logging level is set to debug.
+		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG) {
+			writeToLog(inc_class, inc_basicMessageText);
+		}
+	}
+	
+	protected static void logErrorMessage(String inc_class, String inc_errorMessage, String inc_errorType) {
+		// Always log error messages regardless of logging level.
+		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.ERROR) {
+			writeToLog(inc_class, inc_errorMessage);
+		}
+		
+		// TODO:  Initiate error dialog box.
+		
+		// TODO:  Handle application shutdown errors.
+	}
+	
+	protected static void logExceptionMessage(String inc_class, String inc_exceptionMessage) {
+		// Always log exception messages regardless of logging level.
+		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.ERROR) {
+			writeToLog(inc_class, inc_exceptionMessage);
+		}
+		
+		// TODO:  Initiate error dialog box.
+		
+		// TODO:  Handle application shutdown errors.
 	}
 	
 	//-----------------------------------------------------------------//
 	
 	/** Private methods **/
 	
-	private static void writeToLog(String inc_class, String inc_logEntryMessage) {
+	private static void writeToLog(String inc_class, String inc_messageText) {
 		// Format the timestamp and log message text.
-		timestamp = new DateTime();
-		String finalLogEntryMessage = "";
-		finalLogEntryMessage += formatTimestamp(timestamp) + " : " + inc_class;
-		finalLogEntryMessage += formatLogEntryMessage(inc_logEntryMessage);
+		DateTime timestamp = new DateTime();
+		String formattedMessageText = "";
+		formattedMessageText += formatTimestamp(timestamp) + " : " + inc_class;
+		formattedMessageText += formatMessageText(inc_messageText);
 		
 		// Write the log entry to the log file.
 		BufferedWriter outStream = null;
 		try {
 			outStream = new BufferedWriter(new FileWriter(logFile, true));
-			outStream.write(finalLogEntryMessage);
+			outStream.write(formattedMessageText);
 			outStream.newLine();
 		} catch (IOException e) {
 			// TODO:  Exception handling.
@@ -141,17 +164,17 @@ public class BPCC_Logger {
 		return formattedTimestampString;
 	}
 	
-	private static String formatLogEntryMessage(String inc_logEntryMessage) {
-		String formattedLogEntry = "\r\n\t";
-		for (int i = 0; i < inc_logEntryMessage.length(); i++) {
-			if (inc_logEntryMessage.charAt(i) == '\n') {
-				formattedLogEntry += "\r\n\t";
+	private static String formatMessageText(String inc_messageText) {
+		String formattedMessageText = "\r\n\t";
+		for (int i = 0; i < inc_messageText.length(); i++) {
+			if (inc_messageText.charAt(i) == '\n') {
+				formattedMessageText += "\r\n\t";
 			}
 			else {
-				formattedLogEntry += inc_logEntryMessage.charAt(i);
+				formattedMessageText += inc_messageText.charAt(i);
 			}
 		}
-		return formattedLogEntry;
+		return formattedMessageText;
 	}
 	
 	//-----------------------------------------------------------------//
