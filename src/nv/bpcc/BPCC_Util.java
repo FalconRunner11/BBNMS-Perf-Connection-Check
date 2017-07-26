@@ -6,6 +6,8 @@ package nv.bpcc;
 
 import java.lang.invoke.MethodHandles;
 
+import javax.swing.JFrame;
+
 public class BPCC_Util {
 	
 	//-----------------------------------------------------------------//
@@ -21,10 +23,13 @@ public class BPCC_Util {
 	private final String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
 	private final static String versionNumber = "0.1.0";
+	private final static String applicationTitle = "BBNMS Perf Connection Check v" + versionNumber;
 	
 	//-----------------------------------------------------------------//
 	
 	/** Declare static fields **/
+	
+	private static JFrame hubFrame;
 	
 	private static LogLevelEnum logLevel;
 	
@@ -34,6 +39,9 @@ public class BPCC_Util {
 	
 	protected static void initStaticFields() {
 		// TODO:  Call from the beginning of BPCC_Hub.
+		
+		hubFrame = null;
+		
 		logLevel = LogLevelEnum.DEBUG;
 	}
 	
@@ -57,6 +65,14 @@ public class BPCC_Util {
 		return versionNumber;
 	}
 	
+	protected static JFrame getHubFrame() {
+		return hubFrame;
+	}
+	
+	protected static String getApplicationTitle() {
+		return applicationTitle;
+	}
+	
 	protected static LogLevelEnum getLogLevel() {
 		return logLevel;
 	}
@@ -64,6 +80,11 @@ public class BPCC_Util {
 	//-----------------------------------------------------------------//
 	
 	/** Mutator methods **/
+	
+	protected static void setHubFrame(JFrame inc_frame) {
+		// TODO:  Must be called from BPCC_Hub early on in execution.
+		hubFrame = inc_frame;
+	}
 	
 	protected static void setLogLevel(LogLevelEnum inc_logLevel) {
 		logLevel = inc_logLevel;

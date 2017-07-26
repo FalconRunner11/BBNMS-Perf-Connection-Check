@@ -26,8 +26,9 @@ public class BPCC_Logger {
 	
 	private final static String logFile = "bpcc.log";
 	
+	private final static BPCC_Dialog_Error errorDialog = new BPCC_Dialog_Error();
+	
 	private final static String fatalErrorMessageString = "Application closed due to a fatal error";
-	private final static String fatalErrorTypeString = "Fatal error";
 	
 	//-----------------------------------------------------------------//
 	
@@ -86,17 +87,20 @@ public class BPCC_Logger {
 		}
 	}
 	
-	protected static void logErrorMessage(String inc_class, String inc_errorMessage, String inc_errorType, int inc_errorCode) {
+	protected static void logErrorMessage(String inc_class, String inc_errorMessage, int inc_errorCode) {
 		// Always log error messages regardless of logging level.
+		
+		
 		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.ERROR) {
 			writeToLog(inc_class, inc_errorMessage);
 		}
 		
-		// TODO:  Initiate error dialog box.
+		// Initiate error dialog box.
+		errorDialog.setErrorDialog(inc_errorMessage);
 		
 		// Handle application shutdown errors.
 		if (inc_errorCode == -1) {
-			BPCC_Logger.logErrorMessage(inc_class, fatalErrorMessageString, fatalErrorTypeString, 0);
+			BPCC_Logger.logErrorMessage(inc_class, fatalErrorMessageString, 0);
 			System.exit(-1);
 		}
 	}
@@ -109,11 +113,12 @@ public class BPCC_Logger {
 			writeToLog(inc_class, sw.toString());
 		}
 		
-		// TODO:  Initiate error dialog box.
+		// Initiate exception dialog box.
+		errorDialog.setExceptionDialog(inc_exception);
 		
 		// Handle application shutdown errors.
 		if (inc_errorCode == -1) {
-			BPCC_Logger.logErrorMessage(inc_class, fatalErrorMessageString, fatalErrorTypeString, 0);
+			BPCC_Logger.logErrorMessage(inc_class, fatalErrorMessageString, 0);
 			System.exit(-1);
 		}
 	}
