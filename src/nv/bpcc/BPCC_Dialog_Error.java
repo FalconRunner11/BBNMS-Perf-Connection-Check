@@ -14,6 +14,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.invoke.MethodHandles;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -32,6 +33,9 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	//-----------------------------------------------------------------//
 	
 	/** Declare and initialize final variables **/
+	
+	@SuppressWarnings("unused")
+	private final static String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
 	private final String dialogTitle = BPCC_Util.getApplicationTitle();
 	
@@ -72,6 +76,8 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == okButton) {
+			// Log user interaction with okButton.
+			BPCC_Logger.logDebugMessage(classNameForLogger, "User clicked \"OK\" Button");
 			dialog.dispose();
 		}
 	}
@@ -113,13 +119,15 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 				// Do nothing as the JDialog is closing.
 			}
 			public void windowClosed(WindowEvent wE) {
-				// Do nothing once the JDialog is closed.
+				// Log JDialog is closed once the JDialog is closed.
+				BPCC_Logger.logInfoMessage(classNameForLogger, "Closed error dialog");
 			}
 		});
 		dialog.pack();
 		dialog.validate();
 		dialog.setLocationRelativeTo(hubFrame);
 		dialog.setVisible(true);
+		BPCC_Logger.logInfoMessage(classNameForLogger, "Created error dialog.");
 	}
 	
 	private JPanel buildMainPanel() {

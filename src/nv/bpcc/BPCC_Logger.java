@@ -76,22 +76,27 @@ public class BPCC_Logger {
 		try {
 			new PrintWriter(logFile).close();
 		} catch (FileNotFoundException e) {
-			BPCC_Logger.logExceptionMessage(classNameForLogger, e, -1);
+			BPCC_Logger.logErrorMessage(classNameForLogger, e, -1);
 		}
 	}
 	
-	protected static void logBasicMessage(String inc_class, String inc_basicMessageText) {
-		// Only log basic messages when logging level is set to debug.
+	protected static void logDebugMessage(String inc_class, String inc_debugMessageText) {
+		// Log DEBUG message if logging level is set to DEBUG.
 		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG) {
-			writeToLog(inc_class, inc_basicMessageText);
+			writeToLog(inc_class, inc_debugMessageText);
+		}
+	}
+	
+	protected static void logInfoMessage(String inc_class, String inc_infoMessageText) {
+		// Log INFO message if logging level is set to INFO or higher.
+		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.INFO) {
+			writeToLog(inc_class, inc_infoMessageText);
 		}
 	}
 	
 	protected static void logErrorMessage(String inc_class, String inc_errorMessage, int inc_errorCode) {
-		// Always log error messages regardless of logging level.
-		
-		
-		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.ERROR) {
+		// Log ERROR message if logging level is set to ERROR or higher.
+		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.INFO || BPCC_Util.getLogLevel() == LogLevelEnum.ERROR) {
 			writeToLog(inc_class, inc_errorMessage);
 		}
 		
@@ -105,7 +110,7 @@ public class BPCC_Logger {
 		}
 	}
 	
-	protected static void logExceptionMessage(String inc_class, Exception inc_exception, int inc_errorCode) {
+	protected static void logErrorMessage(String inc_class, Exception inc_exception, int inc_errorCode) {
 		// Always log exception messages regardless of logging level.
 		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.ERROR) {
 			StringWriter sw = new StringWriter();
@@ -141,12 +146,12 @@ public class BPCC_Logger {
 			outStream.write(formattedMessageText);
 			outStream.newLine();
 		} catch (IOException e) {
-			BPCC_Logger.logExceptionMessage(classNameForLogger, e, -1);
+			BPCC_Logger.logErrorMessage(classNameForLogger, e, -1);
 		} finally {
 			try {
 				outStream.close();
 			} catch (IOException e) {
-				BPCC_Logger.logExceptionMessage(classNameForLogger, e, -1);
+				BPCC_Logger.logErrorMessage(classNameForLogger, e, -1);
 			}
 		}
 	}

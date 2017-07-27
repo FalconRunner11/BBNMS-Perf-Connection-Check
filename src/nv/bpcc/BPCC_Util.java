@@ -14,12 +14,13 @@ public class BPCC_Util {
 	
 	/** Declare enums **/
 	
-	protected enum LogLevelEnum {ERROR, DEBUG};
+	protected enum LogLevelEnum {DEBUG, INFO, ERROR};
 	
 	//-----------------------------------------------------------------//
 	
 	/** Declare and initialize final variables **/
 	
+	@SuppressWarnings("unused")
 	private final String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
 	private final static String versionNumber = "0.1.0";
@@ -42,7 +43,7 @@ public class BPCC_Util {
 		
 		hubFrame = null;
 		
-		logLevel = LogLevelEnum.DEBUG;
+		logLevel = LogLevelEnum.INFO;
 	}
 	
 	//-----------------------------------------------------------------//
