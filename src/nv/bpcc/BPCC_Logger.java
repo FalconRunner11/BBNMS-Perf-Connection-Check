@@ -1,5 +1,9 @@
 /**
- *  
+ *  This class is responsible for logging application events initiated by other classes.
+ *  In the case of logging application error messages and exceptions, a BPCC_Dialog_Error object is launched, presenting the user with information 
+ *  regarding the error or execption.
+ *  Calls to log error and exception messages are accompanied by a flag of either 0 or -1.  A value of -1 causes the application to exit/shut down.  
+ *  A flag of 0 allows program execution to continue.
  */
 
 package nv.bpcc;
@@ -28,7 +32,7 @@ public class BPCC_Logger {
 	
 	private final static BPCC_Dialog_Error errorDialog = new BPCC_Dialog_Error();
 	
-	private final static String fatalErrorMessageString = "Application closed due to a fatal error";
+	private final static String logMessage_fatalError = "Application closed due to a fatal error";
 	
 	//-----------------------------------------------------------------//
 	
@@ -73,6 +77,7 @@ public class BPCC_Logger {
 	/** Protected methods **/
 	
 	protected static void clearLogFile() {
+		// TODO:  Call from the beginning of BPCC_Hub.
 		try {
 			new PrintWriter(logFile).close();
 		} catch (FileNotFoundException e) {
@@ -80,24 +85,24 @@ public class BPCC_Logger {
 		}
 	}
 	
-	protected static void logDebugMessage(String inc_class, String inc_debugMessageText) {
+	protected static void logDebugMessage(String inc_className, String inc_debugMessageText) {
 		// Log DEBUG message if logging level is set to DEBUG.
 		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG) {
-			writeToLog(inc_class, inc_debugMessageText);
+			writeToLog(inc_className, inc_debugMessageText);
 		}
 	}
 	
-	protected static void logInfoMessage(String inc_class, String inc_infoMessageText) {
+	protected static void logInfoMessage(String inc_className, String inc_infoMessageText) {
 		// Log INFO message if logging level is set to INFO or higher.
 		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.INFO) {
-			writeToLog(inc_class, inc_infoMessageText);
+			writeToLog(inc_className, inc_infoMessageText);
 		}
 	}
 	
-	protected static void logErrorMessage(String inc_class, String inc_errorMessage, int inc_errorCode) {
+	protected static void logErrorMessage(String inc_className, String inc_errorMessage, int inc_errorCode) {
 		// Log ERROR message if logging level is set to ERROR or higher.
 		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.INFO || BPCC_Util.getLogLevel() == LogLevelEnum.ERROR) {
-			writeToLog(inc_class, inc_errorMessage);
+			writeToLog(inc_className, inc_errorMessage);
 		}
 		
 		// Initiate error dialog box.
@@ -105,17 +110,17 @@ public class BPCC_Logger {
 		
 		// Handle application shutdown errors.
 		if (inc_errorCode == -1) {
-			BPCC_Logger.logErrorMessage(inc_class, fatalErrorMessageString, 0);
+			BPCC_Logger.logErrorMessage(inc_className, logMessage_fatalError, 0);
 			System.exit(-1);
 		}
 	}
 	
-	protected static void logErrorMessage(String inc_class, Exception inc_exception, int inc_errorCode) {
-		// Always log exception messages regardless of logging level.
-		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.ERROR) {
+	protected static void logErrorMessage(String inc_className, Exception inc_exception, int inc_errorCode) {
+		// Log exception (ERROR) message if logging level is set to ERROR or higher.
+		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.INFO || BPCC_Util.getLogLevel() == LogLevelEnum.ERROR) {
 			StringWriter sw = new StringWriter();
 			inc_exception.printStackTrace(new PrintWriter(sw));
-			writeToLog(inc_class, sw.toString());
+			writeToLog(inc_className, sw.toString());
 		}
 		
 		// Initiate exception dialog box.
@@ -123,7 +128,7 @@ public class BPCC_Logger {
 		
 		// Handle application shutdown errors.
 		if (inc_errorCode == -1) {
-			BPCC_Logger.logErrorMessage(inc_class, fatalErrorMessageString, 0);
+			BPCC_Logger.logErrorMessage(inc_className, logMessage_fatalError, 0);
 			System.exit(-1);
 		}
 	}
@@ -132,11 +137,11 @@ public class BPCC_Logger {
 	
 	/** Private methods **/
 	
-	private static void writeToLog(String inc_class, String inc_messageText) {
+	private static void writeToLog(String inc_className, String inc_messageText) {
 		// Format the timestamp and log message text.
 		DateTime timestamp = new DateTime();
-		String formattedMessageText = "";
-		formattedMessageText += formatTimestamp(timestamp) + " : " + inc_class;
+		String formattedMessageText = new String();
+		formattedMessageText += formatTimestamp(timestamp) + " : " + inc_className;
 		formattedMessageText += formatMessageText(inc_messageText);
 		
 		// Write the log entry to the log file.
@@ -157,7 +162,7 @@ public class BPCC_Logger {
 	}
 	
 	private static String formatTimestamp(DateTime inc_timestamp) {
-		String formattedTimestampString = "";
+		String formattedTimestampString = new String();
 		formattedTimestampString += inc_timestamp.getYear() + "-";
 		if (inc_timestamp.getMonthOfYear() < 10) {
 			formattedTimestampString += "0";

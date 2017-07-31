@@ -34,10 +34,18 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	
 	/** Declare and initialize final variables **/
 	
-	@SuppressWarnings("unused")
 	private final static String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
-	private final String dialogTitle = BPCC_Util.getApplicationTitle();
+	private final String guiText_dialogTitle = BPCC_Util.getApplicationTitle();
+	
+	private final String guiText_dialogBorder = "Error/Exception Encountered!";
+	
+	private final String guiText_okButton = "OK";
+	
+	private final String logMessage_dialogCreated = "Error dialog created and displayed.";
+	private final String logMessage_dialogClosed = "Error dialog closed.";
+	
+	private final String logMessage_okButton = "User clicked \"OK\" Button.";
 	
 	//-----------------------------------------------------------------//
 	
@@ -54,7 +62,7 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	/** Initialize global variables **/
 	
 	private void initVars() {
-		okButton = new JButton("OK");
+		okButton = new JButton(guiText_okButton);
 		okButton.addActionListener(this);
 		
 		textArea = new JTextArea();
@@ -77,7 +85,7 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == okButton) {
 			// Log user interaction with okButton.
-			BPCC_Logger.logDebugMessage(classNameForLogger, "User clicked \"OK\" Button");
+			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_okButton);
 			dialog.dispose();
 		}
 	}
@@ -112,7 +120,7 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 		pane.setComponentOrientation((getRootFrame()).getComponentOrientation());
 		pane.setMessageType(PLAIN_MESSAGE);
 		pane.setOptions(new Object[] {});		// Removes default JOptionPane buttons, so that custom ones may be used.
-		dialog = pane.createDialog(null, dialogTitle);
+		dialog = pane.createDialog(null, guiText_dialogTitle);
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		dialog.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent wE) {
@@ -120,14 +128,14 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 			}
 			public void windowClosed(WindowEvent wE) {
 				// Log JDialog is closed once the JDialog is closed.
-				BPCC_Logger.logInfoMessage(classNameForLogger, "Closed error dialog");
+				BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
 			}
 		});
 		dialog.pack();
 		dialog.validate();
 		dialog.setLocationRelativeTo(hubFrame);
 		dialog.setVisible(true);
-		BPCC_Logger.logInfoMessage(classNameForLogger, "Created error dialog.");
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogCreated);
 	}
 	
 	private JPanel buildMainPanel() {
@@ -135,7 +143,7 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 		GridBagConstraints mainPanelConstraints = new GridBagConstraints();
 		int currentGridX;
 		int currentGridY;
-		mainPanel.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(EtchedBorder.RAISED), "Error/Exception Encountered!"));
+		mainPanel.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(EtchedBorder.RAISED), guiText_dialogBorder));
 		
 		// Error label
 		currentGridX = 0;

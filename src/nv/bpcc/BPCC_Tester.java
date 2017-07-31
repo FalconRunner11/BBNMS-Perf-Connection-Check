@@ -28,7 +28,16 @@ public class BPCC_Tester {
 	
 	/** Declare and initialize final variables **/
 	
-	private final String classStringForLogger = MethodHandles.lookup().lookupClass().getName().toString();
+	private static final String classStringForLogger = MethodHandles.lookup().lookupClass().getName().toString();
+	
+	private final String guiText_frameTitle = "Test";
+	
+	private final String guiText_okButton = "OK";
+	
+	private final String logMessage_frameCreated = "Test frame created and displayed.";
+	private final String logMessage_frameClosed = "Test frame closed.";
+	
+	private final String logMessage_executedTest = "Executed test.";
 	
 	//-----------------------------------------------------------------//
 	
@@ -75,25 +84,25 @@ public class BPCC_Tester {
 	/** Private methods **/
 	
 	private void start() {
+		// Clear the log file.
+		BPCC_Logger.clearLogFile();
+		
 		// Initialize BPCC_Util static fields.
 		BPCC_Util.initStaticFields();
 		
 		// Set logging level desired for test.
 		BPCC_Util.setLogLevel(LogLevelEnum.DEBUG);
 		
-		// Clear the log file.
-		BPCC_Logger.clearLogFile();
-		
 		// Initialize class global variables.
 		initVars();
 		
 		// Create a JFrame with a single button which will execute whatever is to be tested.
-		JFrame frame = new JFrame("Test");
+		JFrame frame = new JFrame(guiText_frameTitle);
 		BPCC_Util.setHubFrame(frame);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent wE) {
-				BPCC_Logger.logInfoMessage(classStringForLogger, "User closed the application.");
+				BPCC_Logger.logInfoMessage(classStringForLogger, logMessage_frameClosed);
 				System.exit(0);
 			}
 		});
@@ -106,7 +115,7 @@ public class BPCC_Tester {
 		int heightWithoutTaskbar = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
 		frame.setLocation((screenDim.width - frameDim.width) / 2, (heightWithoutTaskbar - frameDim.height) / 2);		//Centers application in user's display
 		frame.setVisible(true);
-		BPCC_Logger.logInfoMessage(classStringForLogger, "Created test frame.");
+		BPCC_Logger.logInfoMessage(classStringForLogger, logMessage_frameCreated);
 	}
 	
 	private JPanel buildPanel() {
@@ -114,7 +123,7 @@ public class BPCC_Tester {
 		GridBagConstraints panelConstraints = new GridBagConstraints();
 		panelConstraints.insets = new Insets(100, 100, 100, 100);
 		
-		JButton okButton = new JButton("OK");
+		JButton okButton = new JButton(guiText_okButton);
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				executeTest();
@@ -127,7 +136,7 @@ public class BPCC_Tester {
 	}
 	
 	private void executeTest() {
-		BPCC_Logger.logInfoMessage(classStringForLogger, "Executed test.");
+		BPCC_Logger.logInfoMessage(classStringForLogger, logMessage_executedTest);
 		
 		// TODO:  Test block.
 		

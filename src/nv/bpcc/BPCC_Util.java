@@ -1,5 +1,14 @@
 /**
  *  This class contains any values, variables, and methods which may be used in a static context by other classes in the application.
+ *  LogLevelEnum values:
+ *  	DEBUG:	Application errors and exceptions
+ *  			User-GUI interaction events
+ *  			Major application events
+ *  			Minor application events
+ *  	INFO:	Application errors and exceptions
+ *  			User-GUI interaction events
+ *  			Major application events
+ *  	ERROR:	Application errors and exceptions
  */
 
 package nv.bpcc;
@@ -20,11 +29,13 @@ public class BPCC_Util {
 	
 	/** Declare and initialize final variables **/
 	
-	@SuppressWarnings("unused")
-	private final String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
+	private final static String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
 	private final static String versionNumber = "0.1.0";
 	private final static String applicationTitle = "BBNMS Perf Connection Check v" + versionNumber;
+	
+	private final static String logMessage_initializeVariables = "Initialized application variables.";
+	private final static String logMessage_setLogLevel = "Logging level set to ";
 	
 	//-----------------------------------------------------------------//
 	
@@ -43,7 +54,10 @@ public class BPCC_Util {
 		
 		hubFrame = null;
 		
-		logLevel = LogLevelEnum.INFO;
+		// TODO:  Decide what final default log level should be at release of application.
+		setLogLevel(LogLevelEnum.INFO);
+		
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_initializeVariables);
 	}
 	
 	//-----------------------------------------------------------------//
@@ -89,6 +103,8 @@ public class BPCC_Util {
 	
 	protected static void setLogLevel(LogLevelEnum inc_logLevel) {
 		logLevel = inc_logLevel;
+		
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_setLogLevel + inc_logLevel);
 	}
 	
 	//-----------------------------------------------------------------//
