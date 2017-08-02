@@ -40,6 +40,9 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	
 	private final String guiText_dialogBorder = "Error/Exception Encountered!";
 	
+	private final String guiText_label_exceptionPrefix= "Exception:  ";
+	private final String guiText_label_errorPrefix = "Application Error";
+	
 	private final String guiText_okButton = "OK";
 	
 	private final String logMessage_dialogCreated = "Error dialog created and displayed.";
@@ -100,12 +103,12 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 		inc_exception.printStackTrace(pw);
 		String stackTrace = sw.toString();
 		initVars();
-		createAndShowGUI("Exception:  " + inc_exception.getClass(), stackTrace);
+		createAndShowGUI(guiText_label_exceptionPrefix + inc_exception.getClass(), stackTrace);
 	}
 	
 	protected void setErrorDialog(String inc_errorMessage) {
 		initVars();
-		createAndShowGUI("Application Error", inc_errorMessage);
+		createAndShowGUI(guiText_label_errorPrefix, inc_errorMessage);
 	}
 	
 	//-----------------------------------------------------------------//
