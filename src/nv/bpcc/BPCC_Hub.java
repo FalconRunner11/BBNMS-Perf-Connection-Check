@@ -24,18 +24,22 @@ public class BPCC_Hub {
 	
 	private final static String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
+	private final String logMessage_frameCreated = "Application frame created and displayed.";
+	private final String logMessage_frameClosed = "Application frame closed.";
+	
 	//-----------------------------------------------------------------//
 	
 	/** Declare global variables **/
 	
-	JFrame hubFrame;
+	JFrame applicationFrame;
 	
 	//-----------------------------------------------------------------//
 	
 	/** Initialize global variables **/
 	
 	private void initVars() {
-		hubFrame = new JFrame(BPCC_Util.getApplicationTitle());
+		applicationFrame = new JFrame(BPCC_Util.getApplicationTitle());
+		BPCC_Util.setHubFrame(applicationFrame);
 	}
 	
 	//-----------------------------------------------------------------//
@@ -67,21 +71,28 @@ public class BPCC_Hub {
 	/** Create and manage GUI components **/
 	
 	private void createAndShowGUI() {
-		hubFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		hubFrame.addWindowListener(new WindowAdapter() {
+		applicationFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		applicationFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent wE) {
 				end();
 			}
+			public void windowClosed(WindowEvent wE) {
+				// Do nothing once the JFrame is closed.
+			}
 		});
-		hubFrame.setResizable(false);
-		hubFrame.getContentPane().add(buildMainPanel());
-		hubFrame.pack();
-		hubFrame.validate();
+		applicationFrame.setResizable(false);
+		applicationFrame.getContentPane().add(buildMainPanel());
+		applicationFrame.pack();
+		applicationFrame.validate();
 		Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension frameDim = hubFrame.getSize();
+		Dimension frameDim = applicationFrame.getSize();
 		int heightWithoutTaskbar = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
-		hubFrame.setLocation((screenDim.width - frameDim.width) / 2, (heightWithoutTaskbar - frameDim.height) / 2);		//Centers application in user's display
-		hubFrame.setVisible(true);
+		applicationFrame.setLocation((screenDim.width - frameDim.width) / 2, (heightWithoutTaskbar - frameDim.height) / 2);		//Centers application in user's display
+		
+		// TODO:  Create and display login dialog.
+		
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_frameCreated);
+		applicationFrame.setVisible(true);
 	}
 	
 	private JPanel buildMainPanel() {
@@ -115,7 +126,7 @@ public class BPCC_Hub {
 	}
 	
 	private void end() {
-		// TODO:  Add a log message here for when use exits the application.
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_frameClosed);
 		System.exit(0);
 	}
 	

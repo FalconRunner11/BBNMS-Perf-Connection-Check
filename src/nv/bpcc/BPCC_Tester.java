@@ -39,9 +39,9 @@ public class BPCC_Tester implements ActionListener {
 	private final String logMessage_frameCreated = "Test frame created and displayed.";
 	private final String logMessage_frameClosed = "Test frame closed.";
 	
-	private final String logMessage_testButton = "User clicked on \"Test\" button.";
+	private final String logMessage_testButtonClicked = "User clicked on \"Test\" button.";
 	
-	private final String logMessage_exitButton = "User clicked on \"Exit\" button.";
+	private final String logMessage_exitButtonClicked = "User clicked on \"Exit\" button.";
 	
 	private final String logMessage_executedTest = "Executed test.";
 	
@@ -49,15 +49,20 @@ public class BPCC_Tester implements ActionListener {
 	
 	/** Declare global variables **/
 	
-	JButton testButton;
+	private JFrame testFrame;
 	
-	JButton exitButton;
+	private JButton testButton;
+	
+	private JButton exitButton;
 	
 	//-----------------------------------------------------------------//
 	
 	/** Initialize global variables **/
 	
 	private void initVars() {
+		testFrame = new JFrame(guiText_frameTitle);
+		BPCC_Util.setHubFrame(testFrame);
+		
 		testButton = new JButton(guiText_testButton);
 		testButton.addActionListener(this);
 		
@@ -85,11 +90,11 @@ public class BPCC_Tester implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == testButton) {
-			BPCC_Logger.logDebugMessage(classStringForLogger, logMessage_testButton);
+			BPCC_Logger.logDebugMessage(classStringForLogger, logMessage_testButtonClicked);
 			executeTest();
 		}
 		else if (e.getSource() == exitButton) {
-			BPCC_Logger.logDebugMessage(classStringForLogger, logMessage_exitButton);
+			BPCC_Logger.logDebugMessage(classStringForLogger, logMessage_exitButtonClicked);
 			end();
 		}
 	}
@@ -112,32 +117,30 @@ public class BPCC_Tester implements ActionListener {
 		BPCC_Util.initStaticFields();
 		
 		// Set logging level desired for test.
-		BPCC_Util.setLogLevel(LogLevelEnum.DEBUG);
+		BPCC_Util.setLogLevel(LogLevelEnum.ERROR);
 		
 		// Initialize class global variables.
 		initVars();
 		
 		// Create a JFrame with a single button which will execute whatever is to be tested.
-		JFrame frame = new JFrame(guiText_frameTitle);
-		BPCC_Util.setHubFrame(frame);
-		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		frame.addWindowListener(new WindowAdapter() {
+		testFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		testFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent wE) {
-				// Do nothing as the JDialog is closing.
+				// Do nothing as the JFrame is closing.
 			}
 			public void windowClosed(WindowEvent wE) {
-				// Do nothing once the JDialog is closed.
+				// Do nothing once the JFrame is closed.
 			}
 		});
-		frame.setResizable(false);
-		frame.getContentPane().add(buildPanel());
-		frame.pack();
-		frame.validate();
+		testFrame.setResizable(false);
+		testFrame.getContentPane().add(buildPanel());
+		testFrame.pack();
+		testFrame.validate();
 		Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension frameDim = frame.getSize();
+		Dimension frameDim = testFrame.getSize();
 		int heightWithoutTaskbar = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
-		frame.setLocation((screenDim.width - frameDim.width) / 2, (heightWithoutTaskbar - frameDim.height) / 2);		//Centers application in user's display
-		frame.setVisible(true);
+		testFrame.setLocation((screenDim.width - frameDim.width) / 2, (heightWithoutTaskbar - frameDim.height) / 2);		//Centers application in user's display
+		testFrame.setVisible(true);
 		BPCC_Logger.logInfoMessage(classStringForLogger, logMessage_frameCreated);
 	}
 	
@@ -167,7 +170,8 @@ public class BPCC_Tester implements ActionListener {
 		BPCC_Logger.logInfoMessage(classStringForLogger, logMessage_executedTest);
 		
 		// TODO:  Test block.
-		BPCC_Logger.logErrorMessage(classStringForLogger, "Test", 0);
+		BPCC_Dialog_Login loginDialog = new BPCC_Dialog_Login();
+		loginDialog.showLoginDialog();
 		// TODO:  Test block.
 	}
 

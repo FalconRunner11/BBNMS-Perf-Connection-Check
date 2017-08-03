@@ -34,8 +34,9 @@ public class BPCC_Util {
 	private final static String versionNumber = "0.1.0";
 	private final static String applicationTitle = "BBNMS Perf Connection Check v" + versionNumber;
 	
-	private final static String logMessage_initializeVariables = "Initialized application variables.";
-	private final static String logMessage_setLogLevel = "Logging level set to ";
+	private final static String logMessage_variablesInitialized = "Initialized application variables.";
+	
+	private final static String logMessage_logLevelSet = "Logging level set to ";
 	
 	//-----------------------------------------------------------------//
 	
@@ -55,7 +56,7 @@ public class BPCC_Util {
 		// TODO:  Decide what final default log level should be at release of application.
 		setLogLevel(LogLevelEnum.INFO);
 		
-		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_initializeVariables);
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_variablesInitialized);
 	}
 	
 	//-----------------------------------------------------------------//
@@ -101,8 +102,7 @@ public class BPCC_Util {
 	
 	protected static void setLogLevel(LogLevelEnum inc_logLevel) {
 		logLevel = inc_logLevel;
-		
-		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_setLogLevel + inc_logLevel);
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_logLevelSet + inc_logLevel);
 	}
 	
 	//-----------------------------------------------------------------//

@@ -19,7 +19,6 @@ import java.lang.invoke.MethodHandles;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -36,11 +35,9 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	
 	private final static String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
-	private final JFrame hubFrame = BPCC_Util.getHubFrame();
-	
 	private final String guiText_dialogTitle = BPCC_Util.getApplicationTitle();
 	
-	private final String guiText_dialogBorder = "Error/Exception Encountered!";
+	private final String guiText_mainPanelBorder = "Error/Exception Encountered!";
 	
 	private final String guiText_label_exceptionPrefix= "Exception:  ";
 	private final String guiText_label_errorPrefix = "Application Error";
@@ -50,30 +47,39 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	private final String logMessage_dialogCreated = "Error dialog created and displayed.";
 	private final String logMessage_dialogClosed = "Error dialog closed.";
 	
-	private final String logMessage_okButton = "User clicked on \"OK\" button.";
+	private final String logMessage_okButtonClicked = "User clicked on \"OK\" button.";
 	
 	//-----------------------------------------------------------------//
 	
 	/** Declare global variables **/
 	
-	private JLabel label;
+	private JOptionPane pane;
+	
 	private JDialog dialog;
+	
+	private JLabel label;
+	
 	private JTextArea textArea;
+	
 	private JButton okButton;
 	
 	//-----------------------------------------------------------------//
 	
 	/** Initialize global variables **/
 	
-	private void initVars() {
-		okButton = new JButton(guiText_okButton);
-		okButton.addActionListener(this);
+	private void initVars(String inc_labelText, String inc_messageText) {
+		label = new JLabel(inc_labelText);
 		
 		textArea = new JTextArea();
 		textArea.setColumns(20);
 		textArea.setEditable(false);
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
+		
+		textArea.setText(inc_messageText);
+		
+		okButton = new JButton(guiText_okButton);
+		okButton.addActionListener(this);
 	}
 	
 	//-----------------------------------------------------------------//
@@ -88,9 +94,10 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == okButton) {
-			// Log user interaction with okButton.
 			dialog.dispose();
-			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_okButton);
+			// Log user interaction with okButton.
+			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_okButtonClicked);
+			// Log dialog closed event.
 			BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
 		}
 	}
@@ -104,26 +111,25 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 		PrintWriter pw = new PrintWriter(sw);
 		inc_exception.printStackTrace(pw);
 		String stackTrace = sw.toString();
-		initVars();
-		createAndShowGUI(guiText_label_exceptionPrefix + inc_exception.getClass(), stackTrace);
+		initVars(guiText_label_exceptionPrefix + inc_exception.getClass(), stackTrace);
+		createAndShowGUI();
 	}
 	
 	protected void setErrorDialog(String inc_errorMessage) {
-		initVars();
-		createAndShowGUI(guiText_label_errorPrefix, inc_errorMessage);
+		initVars(guiText_label_errorPrefix, inc_errorMessage);
+		createAndShowGUI();
 	}
 	
 	//-----------------------------------------------------------------//
 	
 	/** Private methods **/
 	
-	private void createAndShowGUI(String inc_labelText, String inc_messageText) {
-		label = new JLabel(inc_labelText);
-		textArea.setText(inc_messageText);
-		final JOptionPane pane = new JOptionPane(buildMainPanel(), JOptionPane.ERROR_MESSAGE, JOptionPane.PLAIN_MESSAGE);
+	private void createAndShowGUI() {
+		pane = new JOptionPane(buildMainPanel(), JOptionPane.ERROR_MESSAGE, JOptionPane.PLAIN_MESSAGE);
 		pane.setComponentOrientation((getRootFrame()).getComponentOrientation());
 		pane.setMessageType(PLAIN_MESSAGE);
 		pane.setOptions(new Object[] {});		// Removes default JOptionPane buttons, so that custom ones may be used.
+		
 		dialog = pane.createDialog(null, guiText_dialogTitle);
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		dialog.addWindowListener(new WindowAdapter() {
@@ -136,7 +142,8 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 		});
 		dialog.pack();
 		dialog.validate();
-		dialog.setLocationRelativeTo(hubFrame);
+		dialog.setLocationRelativeTo(BPCC_Util.getHubFrame());
+		// Log dialog created event.
 		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogCreated);
 		dialog.setVisible(true);
 	}
@@ -146,7 +153,7 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 		GridBagConstraints mainPanelConstraints = new GridBagConstraints();
 		int currentGridX;
 		int currentGridY;
-		mainPanel.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(EtchedBorder.RAISED), guiText_dialogBorder));
+		mainPanel.setBorder(BorderFactory.createTitledBorder(new EtchedBorder(EtchedBorder.RAISED), guiText_mainPanelBorder));
 		
 		// Error label
 		currentGridX = 0;
