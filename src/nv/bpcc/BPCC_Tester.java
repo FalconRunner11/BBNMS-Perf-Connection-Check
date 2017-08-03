@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 
 import nv.bpcc.BPCC_Util.LogLevelEnum;		// Import this enum from the BPCC_Util class for shorter references to its values.
 
-public class BPCC_Tester {
+public class BPCC_Tester implements ActionListener {
 	
 	//-----------------------------------------------------------------//
 	
@@ -32,10 +32,16 @@ public class BPCC_Tester {
 	
 	private final String guiText_frameTitle = "Test";
 	
-	private final String guiText_okButton = "OK";
+	private final String guiText_testButton = "Test";
+	
+	private final String guiText_exitButton = "Exit";
 	
 	private final String logMessage_frameCreated = "Test frame created and displayed.";
 	private final String logMessage_frameClosed = "Test frame closed.";
+	
+	private final String logMessage_testButton = "User clicked on \"Test\" button.";
+	
+	private final String logMessage_exitButton = "User clicked on \"Exit\" button.";
 	
 	private final String logMessage_executedTest = "Executed test.";
 	
@@ -43,14 +49,20 @@ public class BPCC_Tester {
 	
 	/** Declare global variables **/
 	
+	JButton testButton;
 	
+	JButton exitButton;
 	
 	//-----------------------------------------------------------------//
 	
 	/** Initialize global variables **/
 	
 	private void initVars() {
+		testButton = new JButton(guiText_testButton);
+		testButton.addActionListener(this);
 		
+		exitButton = new JButton(guiText_exitButton);
+		exitButton.addActionListener(this);
 	}
 	
 	//-----------------------------------------------------------------//
@@ -71,8 +83,17 @@ public class BPCC_Tester {
 	
 	/** Implemented methods **/
 	
-	
-	
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == testButton) {
+			BPCC_Logger.logDebugMessage(classStringForLogger, logMessage_testButton);
+			executeTest();
+		}
+		else if (e.getSource() == exitButton) {
+			BPCC_Logger.logDebugMessage(classStringForLogger, logMessage_exitButton);
+			end();
+		}
+	}
+		
 	//-----------------------------------------------------------------//
 	
 	/** Protected methods **/
@@ -102,8 +123,10 @@ public class BPCC_Tester {
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent wE) {
-				BPCC_Logger.logInfoMessage(classStringForLogger, logMessage_frameClosed);
-				System.exit(0);
+				// Do nothing as the JDialog is closing.
+			}
+			public void windowClosed(WindowEvent wE) {
+				// Do nothing once the JDialog is closed.
 			}
 		});
 		frame.setResizable(false);
@@ -118,19 +141,24 @@ public class BPCC_Tester {
 		BPCC_Logger.logInfoMessage(classStringForLogger, logMessage_frameCreated);
 	}
 	
+	private void end() {
+		BPCC_Logger.logInfoMessage(classStringForLogger, logMessage_frameClosed);
+		System.exit(0);
+	}
+	
 	private JPanel buildPanel() {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints panelConstraints = new GridBagConstraints();
-		panelConstraints.insets = new Insets(100, 100, 100, 100);
 		
-		JButton okButton = new JButton(guiText_okButton);
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				executeTest();
-			}
-		});
+		panelConstraints.gridx = 0;
+		panelConstraints.gridy = 0;
+		panelConstraints.insets = new Insets(100, 100, 100, 5);
+		panel.add(testButton, panelConstraints);
 		
-		panel.add(okButton, panelConstraints);
+		panelConstraints.gridx = 1;
+		panelConstraints.gridy = 0;
+		panelConstraints.insets = new Insets(100, 5, 100, 100);
+		panel.add(exitButton, panelConstraints);
 		
 		return panel;
 	}
@@ -139,10 +167,10 @@ public class BPCC_Tester {
 		BPCC_Logger.logInfoMessage(classStringForLogger, logMessage_executedTest);
 		
 		// TODO:  Test block.
-		
+		BPCC_Logger.logErrorMessage(classStringForLogger, "Test", 0);
 		// TODO:  Test block.
 	}
-	
+
 	//-----------------------------------------------------------------//
 	
 }

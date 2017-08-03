@@ -150,6 +150,7 @@ public class BPCC_Logger {
 			outStream = new BufferedWriter(new FileWriter(logFile, true));
 			outStream.write(formattedMessageText);
 			outStream.newLine();
+			outStream.newLine();
 		} catch (IOException e) {
 			BPCC_Logger.logErrorMessage(classNameForLogger, e, -1);
 		} finally {

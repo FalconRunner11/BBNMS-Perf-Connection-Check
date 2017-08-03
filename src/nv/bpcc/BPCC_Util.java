@@ -50,8 +50,6 @@ public class BPCC_Util {
 	/** Initialize static fields **/
 	
 	protected static void initStaticFields() {
-		// TODO:  Call from the beginning of BPCC_Hub.
-		
 		hubFrame = null;
 		
 		// TODO:  Decide what final default log level should be at release of application.

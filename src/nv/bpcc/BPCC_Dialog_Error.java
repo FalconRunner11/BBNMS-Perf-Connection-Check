@@ -36,6 +36,8 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	
 	private final static String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
+	private final JFrame hubFrame = BPCC_Util.getHubFrame();
+	
 	private final String guiText_dialogTitle = BPCC_Util.getApplicationTitle();
 	
 	private final String guiText_dialogBorder = "Error/Exception Encountered!";
@@ -48,13 +50,12 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	private final String logMessage_dialogCreated = "Error dialog created and displayed.";
 	private final String logMessage_dialogClosed = "Error dialog closed.";
 	
-	private final String logMessage_okButton = "User clicked \"OK\" Button.";
+	private final String logMessage_okButton = "User clicked on \"OK\" button.";
 	
 	//-----------------------------------------------------------------//
 	
 	/** Declare global variables **/
 	
-	private JFrame hubFrame;
 	private JLabel label;
 	private JDialog dialog;
 	private JTextArea textArea;
@@ -88,8 +89,9 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == okButton) {
 			// Log user interaction with okButton.
-			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_okButton);
 			dialog.dispose();
+			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_okButton);
+			BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
 		}
 	}
 	
@@ -116,7 +118,6 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	/** Private methods **/
 	
 	private void createAndShowGUI(String inc_labelText, String inc_messageText) {
-		hubFrame = BPCC_Util.getHubFrame();
 		label = new JLabel(inc_labelText);
 		textArea.setText(inc_messageText);
 		final JOptionPane pane = new JOptionPane(buildMainPanel(), JOptionPane.ERROR_MESSAGE, JOptionPane.PLAIN_MESSAGE);
@@ -130,15 +131,14 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 				// Do nothing as the JDialog is closing.
 			}
 			public void windowClosed(WindowEvent wE) {
-				// Log JDialog is closed once the JDialog is closed.
-				BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
+				// Do nothing once the JDialog is closed.
 			}
 		});
 		dialog.pack();
 		dialog.validate();
 		dialog.setLocationRelativeTo(hubFrame);
-		dialog.setVisible(true);
 		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogCreated);
+		dialog.setVisible(true);
 	}
 	
 	private JPanel buildMainPanel() {
