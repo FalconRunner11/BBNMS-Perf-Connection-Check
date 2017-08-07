@@ -139,7 +139,7 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 				closeDialog();
 			}
 			public void windowClosed(WindowEvent wE) {
-				// Do nothing once the dialog is closed.
+				// Do nothing once dialog is closed.
 			}
 		});
 		dialog.pack();

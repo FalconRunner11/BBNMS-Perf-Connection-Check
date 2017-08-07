@@ -76,6 +76,8 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 	
 	private JButton cancelButton;
 	
+	private String usernameForLogin;
+	
 	//-----------------------------------------------------------------//
 	
 	/** Initialize global variables **/
@@ -83,7 +85,7 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 	private void initVars() {
 		usernameLabel = new JLabel(guiText_usernameLabel);
 		
-		String[] usernameList = getUsernameList();
+		String[] usernameList = getusernameList();
 		usernameComboBox = new JComboBox<String>(usernameList);
 		usernameComboBox.setPrototypeDisplayValue(guiText_usernameComboBox);
 		// TODO:  Add an ItemChangedListener to usernameComboBox.
@@ -132,6 +134,10 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 		createAndShowGUI();
 	}
 	
+	protected String getUsernameForLogin() {
+		return usernameForLogin;
+	}
+	
 	//-----------------------------------------------------------------//
 	
 	/** Private methods **/
@@ -163,11 +169,12 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 	}
 	
 	private void closeDialog(int inc_closeCondition) {
-		if (inc_closeCondition == 0) {		// Exit application.
-			// TODO:  BPCC_Hub.end() should be called on return.
+		if (inc_closeCondition == 1) {		// Log in to application
+			// TODO:  Check username/password matching (when applicable) and set appUserToLogIn.
+			
 		}
-		else if (inc_closeCondition == 1) {		// Log in to application
-			// TODO:  User to be logged in as should be returned and BPCC_Hub should initiate.
+		else if (inc_closeCondition == 0) {		// Exit application.
+			// TODO:  BPCC_Hub.end() should be called on return.
 		}
 		
 		// Log dialog closed event.
@@ -272,8 +279,11 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 		return buttonPanel;
 	}
 	
-	private String[] getUsernameList() {
-		String[] usernameList = {"admin", "guest"};		// TODO:  Collect list of usernames from config file.
+	private String[] getusernameList() {
+		String[] usernameList = new String[BPCC_Util.getAppUserList().size()];
+		for (int i = 0; i < usernameList.length; i++) {
+			usernameList[i] = BPCC_Util.getAppUserList().get(i).getUsername();
+		}
 		return usernameList;
 	}
 	

@@ -6,7 +6,6 @@
  *  			Major application events
  *  			Minor application events
  *  	INFO:	Application errors and exceptions
- *  			User-GUI interaction events
  *  			Major application events
  *  	ERROR:	Application errors and exceptions
  */
@@ -14,6 +13,7 @@
 package nv.bpcc;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -48,16 +48,23 @@ public class BPCC_Util {
 	
 	private static LogLevelEnum logLevel;
 	
+	private static ArrayList<BPCC_AppUser> appUserList;
+	
 	//-----------------------------------------------------------------//
 	
 	/** Initialize static fields **/
 	
 	protected static void initStaticFields() {
-		hubFrame = null;
-		
 		// Initialize logLevel without an accompanying log message.
 		// TODO:  Decide what final default log level should be at release of application.
 		logLevel = LogLevelEnum.INFO;
+		
+		hubFrame = null;
+		
+		// TODO:  Collect list of usernames from config file.
+		appUserList = new ArrayList<BPCC_AppUser>();
+		appUserList.add(new BPCC_AppUser("guest"));
+		appUserList.add(new BPCC_AppUser("admin", "password"));
 		
 		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_variablesInitialized);
 	}
@@ -78,20 +85,20 @@ public class BPCC_Util {
 	
 	/** Accessor methods **/
 	
-	protected static String getVersionNumber() {
-		return versionNumber;
+	protected static String getApplicationTitle() {
+		return applicationTitle;
 	}
 	
 	protected static JFrame getHubFrame() {
 		return hubFrame;
 	}
 	
-	protected static String getApplicationTitle() {
-		return applicationTitle;
-	}
-	
 	protected static LogLevelEnum getLogLevel() {
 		return logLevel;
+	}
+	
+	protected static ArrayList<BPCC_AppUser> getAppUserList() {
+		return appUserList;
 	}
 	
 	//-----------------------------------------------------------------//

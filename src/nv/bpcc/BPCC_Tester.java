@@ -133,7 +133,7 @@ public class BPCC_Tester implements ActionListener {
 				closeFrame();
 			}
 			public void windowClosed(WindowEvent wE) {
-				// Do nothing once the JFrame is closed.
+				// Do nothing once testFrame is closed.
 			}
 		});
 		testFrame.setResizable(false);
@@ -175,11 +175,14 @@ public class BPCC_Tester implements ActionListener {
 		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_executedTest);
 		
 		// TODO:  Test block.
-//		BPCC_Dialog_Login loginDialog = new BPCC_Dialog_Login();
-//		loginDialog.showLoginDialog();
-		
-		BPCC_Dialog_Error errorD = new BPCC_Dialog_Error();
-		errorD.showErrorDialog("errored");
+		BPCC_Dialog_Login loginDialog = new BPCC_Dialog_Login();
+		loginDialog.showLoginDialog();
+		if (loginDialog.getUsernameForLogin() == null) {
+			closeFrame();
+		}
+		else {
+			System.out.println(loginDialog.getUsernameForLogin());
+		}
 		// TODO:  Test block.
 	}
 
