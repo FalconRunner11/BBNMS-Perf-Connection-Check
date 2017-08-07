@@ -28,7 +28,7 @@ public class BPCC_Tester implements ActionListener {
 	
 	/** Declare and initialize final variables **/
 	
-	private static final String classStringForLogger = MethodHandles.lookup().lookupClass().getName().toString();
+	private static final String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
 	private final String guiText_frameTitle = "Test";
 	
@@ -39,9 +39,11 @@ public class BPCC_Tester implements ActionListener {
 	private final String logMessage_frameCreated = "Test frame created and displayed.";
 	private final String logMessage_frameClosed = "Test frame closed.";
 	
-	private final String logMessage_testButtonClicked = "User clicked on \"Test\" button.";
+	private final String logMessage_xButtonClicked = "User clicked on the \"X\" button.";
 	
-	private final String logMessage_exitButtonClicked = "User clicked on \"Exit\" button.";
+	private final String logMessage_testButtonClicked = "User clicked on the \"Test\" button.";
+	
+	private final String logMessage_exitButtonClicked = "User clicked on the \"Exit\" button.";
 	
 	private final String logMessage_executedTest = "Executed test.";
 	
@@ -90,12 +92,12 @@ public class BPCC_Tester implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == testButton) {
-			BPCC_Logger.logDebugMessage(classStringForLogger, logMessage_testButtonClicked);
+			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_testButtonClicked);
 			executeTest();
 		}
 		else if (e.getSource() == exitButton) {
-			BPCC_Logger.logDebugMessage(classStringForLogger, logMessage_exitButtonClicked);
-			end();
+			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_exitButtonClicked);
+			closeFrame();
 		}
 	}
 		
@@ -117,7 +119,7 @@ public class BPCC_Tester implements ActionListener {
 		BPCC_Util.initStaticFields();
 		
 		// Set logging level desired for test.
-		BPCC_Util.setLogLevel(LogLevelEnum.ERROR);
+		BPCC_Util.setLogLevel(LogLevelEnum.DEBUG);
 		
 		// Initialize class global variables.
 		initVars();
@@ -126,7 +128,9 @@ public class BPCC_Tester implements ActionListener {
 		testFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		testFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent wE) {
-				// Do nothing as the JFrame is closing.
+				// Log user interaction with X button.
+				BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_xButtonClicked);
+				closeFrame();
 			}
 			public void windowClosed(WindowEvent wE) {
 				// Do nothing once the JFrame is closed.
@@ -141,11 +145,12 @@ public class BPCC_Tester implements ActionListener {
 		int heightWithoutTaskbar = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
 		testFrame.setLocation((screenDim.width - frameDim.width) / 2, (heightWithoutTaskbar - frameDim.height) / 2);		//Centers application in user's display
 		testFrame.setVisible(true);
-		BPCC_Logger.logInfoMessage(classStringForLogger, logMessage_frameCreated);
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_frameCreated);
 	}
 	
-	private void end() {
-		BPCC_Logger.logInfoMessage(classStringForLogger, logMessage_frameClosed);
+	private void closeFrame() {
+		// Log testFrame closed event.
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_frameClosed);
 		System.exit(0);
 	}
 	
@@ -167,11 +172,14 @@ public class BPCC_Tester implements ActionListener {
 	}
 	
 	private void executeTest() {
-		BPCC_Logger.logInfoMessage(classStringForLogger, logMessage_executedTest);
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_executedTest);
 		
 		// TODO:  Test block.
-		BPCC_Dialog_Login loginDialog = new BPCC_Dialog_Login();
-		loginDialog.showLoginDialog();
+//		BPCC_Dialog_Login loginDialog = new BPCC_Dialog_Login();
+//		loginDialog.showLoginDialog();
+		
+		BPCC_Dialog_Error errorD = new BPCC_Dialog_Error();
+		errorD.showErrorDialog("errored");
 		// TODO:  Test block.
 	}
 

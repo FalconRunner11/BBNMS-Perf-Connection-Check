@@ -38,6 +38,8 @@ public class BPCC_Util {
 	
 	private final static String logMessage_logLevelSet = "Logging level set to ";
 	
+	private final static String logMessage_period = ".";
+	
 	//-----------------------------------------------------------------//
 	
 	/** Declare static fields **/
@@ -53,8 +55,9 @@ public class BPCC_Util {
 	protected static void initStaticFields() {
 		hubFrame = null;
 		
+		// Initialize logLevel without an accompanying log message.
 		// TODO:  Decide what final default log level should be at release of application.
-		setLogLevel(LogLevelEnum.INFO);
+		logLevel = LogLevelEnum.INFO;
 		
 		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_variablesInitialized);
 	}
@@ -101,8 +104,8 @@ public class BPCC_Util {
 	}
 	
 	protected static void setLogLevel(LogLevelEnum inc_logLevel) {
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_logLevelSet + inc_logLevel + logMessage_period);
 		logLevel = inc_logLevel;
-		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_logLevelSet + inc_logLevel);
 	}
 	
 	//-----------------------------------------------------------------//

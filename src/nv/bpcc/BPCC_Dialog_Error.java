@@ -47,7 +47,9 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	private final String logMessage_dialogCreated = "Error dialog created and displayed.";
 	private final String logMessage_dialogClosed = "Error dialog closed.";
 	
-	private final String logMessage_okButtonClicked = "User clicked on \"OK\" button.";
+	private final String logMessage_xButtonClicked = "User clicked on the \"X\" button.";
+	
+	private final String logMessage_okButtonClicked = "User clicked on the \"OK\" button.";
 	
 	//-----------------------------------------------------------------//
 	
@@ -94,11 +96,9 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == okButton) {
-			dialog.dispose();
 			// Log user interaction with okButton.
 			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_okButtonClicked);
-			// Log dialog closed event.
-			BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
+			closeDialog();
 		}
 	}
 	
@@ -106,7 +106,7 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	
 	/** Protected methods **/
 	
-	protected void setExceptionDialog(Exception inc_exception) {
+	protected void showExceptionDialog(Exception inc_exception) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		inc_exception.printStackTrace(pw);
@@ -115,7 +115,7 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 		createAndShowGUI();
 	}
 	
-	protected void setErrorDialog(String inc_errorMessage) {
+	protected void showErrorDialog(String inc_errorMessage) {
 		initVars(guiText_label_errorPrefix, inc_errorMessage);
 		createAndShowGUI();
 	}
@@ -134,10 +134,12 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		dialog.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent wE) {
-				// Do nothing as the JDialog is closing.
+				// Log user interaction with X button.
+				BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_xButtonClicked);
+				closeDialog();
 			}
 			public void windowClosed(WindowEvent wE) {
-				// Do nothing once the JDialog is closed.
+				// Do nothing once the dialog is closed.
 			}
 		});
 		dialog.pack();
@@ -146,6 +148,12 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 		// Log dialog created event.
 		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogCreated);
 		dialog.setVisible(true);
+	}
+	
+	private void closeDialog() {
+		// Log dialog closed event.
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
+		dialog.dispose();
 	}
 	
 	private JPanel buildMainPanel() {

@@ -106,7 +106,7 @@ public class BPCC_Logger {
 		}
 		
 		// Initiate error dialog box.
-		errorDialog.setErrorDialog(inc_errorMessage);
+		errorDialog.showErrorDialog(inc_errorMessage);
 		
 		// Handle application shutdown errors.
 		if (inc_errorCode == -1) {
@@ -124,7 +124,7 @@ public class BPCC_Logger {
 		}
 		
 		// Initiate exception dialog box.
-		errorDialog.setExceptionDialog(inc_exception);
+		errorDialog.showExceptionDialog(inc_exception);
 		
 		// Handle application shutdown errors.
 		if (inc_errorCode == -1) {

@@ -50,9 +50,11 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 	private final String logMessage_dialogCreated = "Login dialog created and displayed.";
 	private final String logMessage_dialogClosed = "Login dialog closed.";
 	
-	private final String logMessage_loginButtonClicked = "User clicked on \"Login\" button.";
+	private final String logMessage_xButtonClicked = "User clicked on the \"X\" button.";
 	
-	private final String logMessage_cancelButtonClicked = "User clicked on \"Cancel\" button.";
+	private final String logMessage_loginButtonClicked = "User clicked on the \"Login\" button.";
+	
+	private final String logMessage_cancelButtonClicked = "User clicked on the \"Cancel\" button.";
 	
 	//-----------------------------------------------------------------//
 	
@@ -110,20 +112,14 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == loginButton) {
-			dialog.dispose();
 			// Log user interaction with loginButton.
 			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_loginButtonClicked);
-			// Log dialog closed event.
-			BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
-			// TODO:  User to be logged in as should be returned and BPCC_Hub should initiate.
+			closeDialog(1);
 		}
 		else if (e.getSource() == cancelButton) {
-			dialog.dispose();
 			// Log user interaction with cancelButton.
 			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_cancelButtonClicked);
-			// Log dialog closed event.
-			BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
-			// TODO:  BPCC_Hub.end() should be called on return.
+			closeDialog(0);
 		}
 	}
 	
@@ -150,10 +146,12 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		dialog.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent wE) {
-				// Do nothing as the JDialog is closing.
+				// Log user interaction with X button.
+				BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_xButtonClicked);
+				closeDialog(0);
 			}
 			public void windowClosed(WindowEvent wE) {
-				// Do nothing once the JDialog is closed.
+				// Do nothing once dialog is closed.
 			}
 		});
 		dialog.pack();
@@ -162,6 +160,19 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 		// Log dialog created event.
 		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogCreated);
 		dialog.setVisible(true);
+	}
+	
+	private void closeDialog(int inc_closeCondition) {
+		if (inc_closeCondition == 0) {		// Exit application.
+			// TODO:  BPCC_Hub.end() should be called on return.
+		}
+		else if (inc_closeCondition == 1) {		// Log in to application
+			// TODO:  User to be logged in as should be returned and BPCC_Hub should initiate.
+		}
+		
+		// Log dialog closed event.
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
+		dialog.dispose();
 	}
 	
 	private JPanel buildMainPanel() {
@@ -207,6 +218,14 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 		loginPanelConstraints.insets = new Insets(5, 10, 0, 10);
 		loginPanel.add(usernameLabel, loginPanelConstraints);
 		
+		// Password label
+		currentGridX++;
+		loginPanelConstraints.gridx = currentGridX;
+		loginPanelConstraints.gridy = currentGridY;
+		loginPanelConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+		loginPanelConstraints.insets = new Insets(5, 10, 0, 10);
+		loginPanel.add(passwordLabel, loginPanelConstraints);
+		
 		// Username combobox
 		currentGridX = 0;
 		currentGridY++;
@@ -216,18 +235,8 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 		loginPanelConstraints.insets = new Insets(0, 10, 10, 10);
 		loginPanel.add(usernameComboBox, loginPanelConstraints);
 		
-		// Password label
-		currentGridX = 0;
-		currentGridY++;
-		loginPanelConstraints.gridx = currentGridX;
-		loginPanelConstraints.gridy = currentGridY;
-		loginPanelConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
-		loginPanelConstraints.insets = new Insets(10, 10, 10, 10);
-		loginPanel.add(passwordLabel, loginPanelConstraints);
-		
 		// Password textfield
-		currentGridX = 0;
-		currentGridY++;
+		currentGridX++;
 		loginPanelConstraints.gridx = currentGridX;
 		loginPanelConstraints.gridy = currentGridY;
 		loginPanelConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -249,7 +258,7 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 		buttonPanelConstraints.gridx = currentGridX;
 		buttonPanelConstraints.gridy = currentGridY;
 		buttonPanelConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
-		buttonPanelConstraints.insets = new Insets(10, 10, 10, 5);
+		buttonPanelConstraints.insets = new Insets(10, 10, 0, 5);
 		buttonPanel.add(loginButton, buttonPanelConstraints);
 		
 		// Cancel button
@@ -257,7 +266,7 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 		buttonPanelConstraints.gridx = currentGridX;
 		buttonPanelConstraints.gridy = currentGridY;
 		buttonPanelConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
-		buttonPanelConstraints.insets = new Insets(10, 5, 10, 10);
+		buttonPanelConstraints.insets = new Insets(10, 5, 0, 10);
 		buttonPanel.add(cancelButton, buttonPanelConstraints);
 		
 		return buttonPanel;
