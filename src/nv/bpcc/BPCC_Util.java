@@ -38,6 +38,8 @@ public class BPCC_Util {
 	
 	private final static String logMessage_logLevelSet = "Logging level set to ";
 	
+	private final static String logMessage_userLogIn = "User logged in as ";
+	
 	private final static String logMessage_period = ".";
 	
 	//-----------------------------------------------------------------//
@@ -49,6 +51,8 @@ public class BPCC_Util {
 	private static JFrame hubFrame;
 	
 	private static ArrayList<BPCC_AppUser> appUserList;
+	
+	private static String activeUser;
 	
 	//-----------------------------------------------------------------//
 	
@@ -101,6 +105,10 @@ public class BPCC_Util {
 		return appUserList;
 	}
 	
+	protected static String getActiveUser() {
+		return activeUser;
+	}
+	
 	//-----------------------------------------------------------------//
 	
 	/** Mutator methods **/
@@ -111,8 +119,15 @@ public class BPCC_Util {
 	}
 	
 	protected static void setLogLevel(LogLevelEnum inc_logLevel) {
+		// Log setting log level event.
 		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_logLevelSet + inc_logLevel + logMessage_period);
 		logLevel = inc_logLevel;
+	}
+	
+	protected static void setActiveUser(String inc_username) {
+		// Log user login event.
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_userLogIn + inc_username + logMessage_period);
+		activeUser = inc_username;
 	}
 	
 	//-----------------------------------------------------------------//

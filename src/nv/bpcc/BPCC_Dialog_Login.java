@@ -171,32 +171,6 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 	
 	/** Private methods **/
 	
-	private void createAndShowGUI() {
-		pane = new JOptionPane(buildMainPanel(), JOptionPane.ERROR_MESSAGE, JOptionPane.PLAIN_MESSAGE);
-		pane.setComponentOrientation((getRootFrame()).getComponentOrientation());
-		pane.setMessageType(PLAIN_MESSAGE);
-		pane.setOptions(new Object[] {});		// Removes default JOptionPane buttons, so that custom ones may be used.
-		
-		dialog = pane.createDialog(null, guiText_dialogTitle);
-		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-		dialog.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent wE) {
-				// Log user interaction with X button.
-				BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_xButtonClicked);
-				closeDialog(0);
-			}
-			public void windowClosed(WindowEvent wE) {
-				// Do nothing once dialog is closed.
-			}
-		});
-		dialog.pack();
-		dialog.validate();
-		dialog.setLocationRelativeTo(BPCC_Util.getHubFrame());
-		// Log dialog created event.
-		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogCreated);
-		dialog.setVisible(true);
-	}
-	
 	private void closeDialog(int inc_closeCondition) {
 		if (inc_closeCondition == 1) {
 			// Log in to application.
@@ -225,6 +199,33 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 			BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
 			dialog.dispose();
 		}
+	}
+	
+	private void createAndShowGUI() {
+		pane = new JOptionPane(buildMainPanel(), JOptionPane.ERROR_MESSAGE, JOptionPane.PLAIN_MESSAGE);
+		pane.setComponentOrientation((getRootFrame()).getComponentOrientation());
+		pane.setMessageType(PLAIN_MESSAGE);
+		pane.setOptions(new Object[] {});		// Removes default JOptionPane buttons, so that custom ones may be used.
+		
+		dialog = pane.createDialog(null, guiText_dialogTitle);
+		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		dialog.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent wE) {
+				// Log user interaction with X button.
+				BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_xButtonClicked);
+				closeDialog(0);
+			}
+			public void windowClosed(WindowEvent wE) {
+				// Do nothing once dialog is closed.
+			}
+		});
+		dialog.pack();
+		dialog.validate();
+		dialog.setLocationRelativeTo(BPCC_Util.getHubFrame());
+		
+		// Log dialog created event.
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogCreated);
+		dialog.setVisible(true);
 	}
 	
 	private JPanel buildMainPanel() {

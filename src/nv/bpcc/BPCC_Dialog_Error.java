@@ -124,6 +124,12 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 	
 	/** Private methods **/
 	
+	private void closeDialog() {
+		// Log dialog closed event.
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
+		dialog.dispose();
+	}
+	
 	private void createAndShowGUI() {
 		pane = new JOptionPane(buildMainPanel(), JOptionPane.ERROR_MESSAGE, JOptionPane.PLAIN_MESSAGE);
 		pane.setComponentOrientation((getRootFrame()).getComponentOrientation());
@@ -145,15 +151,10 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 		dialog.pack();
 		dialog.validate();
 		dialog.setLocationRelativeTo(BPCC_Util.getHubFrame());
+		
 		// Log dialog created event.
 		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogCreated);
 		dialog.setVisible(true);
-	}
-	
-	private void closeDialog() {
-		// Log dialog closed event.
-		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
-		dialog.dispose();
 	}
 	
 	private JPanel buildMainPanel() {

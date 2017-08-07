@@ -30,14 +30,14 @@ public class BPCC_Tester implements ActionListener {
 	
 	private static final String classNameForLogger = MethodHandles.lookup().lookupClass().getName().toString();
 	
-	private final String guiText_frameTitle = "Test";
+	private final String guiText_testFrameTitle = "Test";
 	
 	private final String guiText_testButton = "Test";
 	
 	private final String guiText_exitButton = "Exit";
 	
-	private final String logMessage_frameCreated = "Test frame created and displayed.";
-	private final String logMessage_frameClosed = "Test frame closed.";
+	private final String logMessage_testFrameCreated = "Test frame created and displayed.";
+	private final String logMessage_testFrameClosed = "Test frame closed.";
 	
 	private final String logMessage_xButtonClicked = "User clicked on the \"X\" button.";
 	
@@ -62,7 +62,7 @@ public class BPCC_Tester implements ActionListener {
 	/** Initialize global variables **/
 	
 	private void initVars() {
-		testFrame = new JFrame(guiText_frameTitle);
+		testFrame = new JFrame(guiText_testFrameTitle);
 		BPCC_Util.setHubFrame(testFrame);
 		
 		testButton = new JButton(guiText_testButton);
@@ -77,7 +77,7 @@ public class BPCC_Tester implements ActionListener {
 	/** Main method and class declaration/initialization **/
 	
 	public static void main(String[] args) {
-		new BPCC_Tester().start();
+//		new BPCC_Tester().start();
 	}
 	
 	//-----------------------------------------------------------------//
@@ -111,6 +111,12 @@ public class BPCC_Tester implements ActionListener {
 	
 	/** Private methods **/
 	
+	private void closeFrame() {
+		// Log testFrame closed event.
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_testFrameClosed);
+		System.exit(0);
+	}
+	
 	private void start() {
 		// Clear the log file.
 		BPCC_Logger.clearLogFile();
@@ -143,15 +149,11 @@ public class BPCC_Tester implements ActionListener {
 		Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension frameDim = testFrame.getSize();
 		int heightWithoutTaskbar = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
-		testFrame.setLocation((screenDim.width - frameDim.width) / 2, (heightWithoutTaskbar - frameDim.height) / 2);		//Centers application in user's display
+		testFrame.setLocation((screenDim.width - frameDim.width) / 2, (heightWithoutTaskbar - frameDim.height) / 2);		// Centers application in user's display
+		
+		// Log testFrame created event.
+		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_testFrameCreated);
 		testFrame.setVisible(true);
-		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_frameCreated);
-	}
-	
-	private void closeFrame() {
-		// Log testFrame closed event.
-		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_frameClosed);
-		System.exit(0);
 	}
 	
 	private JPanel buildPanel() {
@@ -181,7 +183,7 @@ public class BPCC_Tester implements ActionListener {
 			closeFrame();
 		}
 		else {
-			System.out.println("Logged in as " + loginDialog.getUsernameForLogin() + " .");
+			System.out.println("Logged in as " + loginDialog.getUsernameForLogin() + ".");
 		}
 		// TODO:  Test block.
 	}

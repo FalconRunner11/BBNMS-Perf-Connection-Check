@@ -79,7 +79,6 @@ public class BPCC_Logger {
 	/** Protected methods **/
 	
 	protected static void clearLogFile() {
-		// TODO:  Call from the beginning of BPCC_Hub.
 		try {
 			new PrintWriter(logFile).close();
 		} catch (FileNotFoundException e) {
@@ -107,7 +106,7 @@ public class BPCC_Logger {
 			writeToLog(inc_className, logMessage_error + inc_errorMessage);
 		}
 		
-		// Initiate error dialog box.
+		// Display error dialog.
 		errorDialog.showErrorDialog(inc_errorMessage);
 		
 		// Handle application shutdown errors.
@@ -125,7 +124,7 @@ public class BPCC_Logger {
 			writeToLog(inc_className, logMessage_exception + sw.toString());
 		}
 		
-		// Initiate exception dialog box.
+		// Display error dialog.
 		errorDialog.showExceptionDialog(inc_exception);
 		
 		// Handle application shutdown errors.
