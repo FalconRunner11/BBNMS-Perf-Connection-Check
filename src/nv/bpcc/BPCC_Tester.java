@@ -181,7 +181,7 @@ public class BPCC_Tester implements ActionListener {
 			closeFrame();
 		}
 		else {
-			System.out.println(loginDialog.getUsernameForLogin());
+			System.out.println("Logged in as " + loginDialog.getUsernameForLogin() + " .");
 		}
 		// TODO:  Test block.
 	}

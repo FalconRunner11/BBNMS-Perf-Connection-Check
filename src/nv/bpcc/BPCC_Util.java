@@ -44,9 +44,9 @@ public class BPCC_Util {
 	
 	/** Declare static fields **/
 	
-	private static JFrame hubFrame;
-	
 	private static LogLevelEnum logLevel;
+
+	private static JFrame hubFrame;
 	
 	private static ArrayList<BPCC_AppUser> appUserList;
 	

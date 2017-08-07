@@ -32,7 +32,9 @@ public class BPCC_Logger {
 	
 	private final static BPCC_Dialog_Error errorDialog = new BPCC_Dialog_Error();
 	
-	private final static String logMessage_fatalError = "Application closed due to a fatal error";
+	private final static String logMessage_error = "BPCC encountered an application error:  ";
+	private final static String logMessage_exception = "BPCC encountered an exception:  ";
+	private final static String logMessage_fatalError = "BPCC closed due to a fatal error.";
 	
 	//-----------------------------------------------------------------//
 	
@@ -102,7 +104,7 @@ public class BPCC_Logger {
 	protected static void logErrorMessage(String inc_className, String inc_errorMessage, int inc_errorCode) {
 		// Log ERROR message if logging level is set to ERROR or higher.
 		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.INFO || BPCC_Util.getLogLevel() == LogLevelEnum.ERROR) {
-			writeToLog(inc_className, inc_errorMessage);
+			writeToLog(inc_className, logMessage_error + inc_errorMessage);
 		}
 		
 		// Initiate error dialog box.
@@ -120,7 +122,7 @@ public class BPCC_Logger {
 		if (BPCC_Util.getLogLevel() == LogLevelEnum.DEBUG || BPCC_Util.getLogLevel() == LogLevelEnum.INFO || BPCC_Util.getLogLevel() == LogLevelEnum.ERROR) {
 			StringWriter sw = new StringWriter();
 			inc_exception.printStackTrace(new PrintWriter(sw));
-			writeToLog(inc_className, sw.toString());
+			writeToLog(inc_className, logMessage_exception + sw.toString());
 		}
 		
 		// Initiate exception dialog box.

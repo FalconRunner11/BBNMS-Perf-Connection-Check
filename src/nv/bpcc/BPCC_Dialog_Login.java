@@ -1,6 +1,6 @@
 /**
  *  This class presents the user with a dialog that prompts for login credentials.
- *  Login credentials will be checked against credentials retrieved from a config file.		// TODO:  Name config file.
+ *  Available login credentials will be retrieved from BPCC_Util.
  */
 
 package nv.bpcc;
@@ -10,9 +10,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -21,7 +24,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 import javax.swing.border.EtchedBorder;
 
 @SuppressWarnings("serial")
@@ -56,6 +59,8 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 	
 	private final String logMessage_cancelButtonClicked = "User clicked on the \"Cancel\" button.";
 	
+	private final String logMessage_incorrectPassword = "Incorrect password.";
+	
 	//-----------------------------------------------------------------//
 	
 	/** Declare global variables **/
@@ -64,13 +69,16 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 	
 	private JDialog dialog;
 	
+	private ArrayList<BPCC_AppUser> appUserList;
+	private BPCC_AppUser selectedAppUser;
+	
 	private JLabel usernameLabel;
 	
 	private JComboBox<String> usernameComboBox;
 	
 	private JLabel passwordLabel;
 	
-	private JTextField passwordTextField;
+	private JPasswordField passwordTextField;
 	
 	private JButton loginButton;
 	
@@ -83,17 +91,38 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 	/** Initialize global variables **/
 	
 	private void initVars() {
+		appUserList = BPCC_Util.getAppUserList();
+		selectedAppUser = appUserList.get(0);
+		
 		usernameLabel = new JLabel(guiText_usernameLabel);
 		
-		String[] usernameList = getusernameList();
-		usernameComboBox = new JComboBox<String>(usernameList);
+		usernameComboBox = new JComboBox<String>(getUsernameList());
 		usernameComboBox.setPrototypeDisplayValue(guiText_usernameComboBox);
-		// TODO:  Add an ItemChangedListener to usernameComboBox.
+		usernameComboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				selectedAppUser = appUserList.get(usernameComboBox.getSelectedIndex());
+				if (selectedAppUser.hasPassword()) {
+					passwordTextField.setText("");
+					passwordTextField.setEditable(true);
+				}
+				else {
+					passwordTextField.setText("");
+					passwordTextField.setEditable(false);
+				}
+			}
+		});
 		
 		passwordLabel = new JLabel(guiText_passwordLabel);
 		
-		passwordTextField = new JTextField(10);
-		// TODO:  Add a FocusListener to passwordTextField.
+		passwordTextField = new JPasswordField(10);
+		if (selectedAppUser.hasPassword()) {
+			passwordTextField.setText("");
+			passwordTextField.setEditable(true);
+		}
+		else {
+			passwordTextField.setText("");
+			passwordTextField.setEditable(false);
+		}
 		
 		loginButton = new JButton(guiText_loginButton);
 		loginButton.addActionListener(this);
@@ -169,17 +198,33 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 	}
 	
 	private void closeDialog(int inc_closeCondition) {
-		if (inc_closeCondition == 1) {		// Log in to application
-			// TODO:  Check username/password matching (when applicable) and set appUserToLogIn.
-			
+		if (inc_closeCondition == 1) {
+			// Log in to application.
+			if (selectedAppUser.hasPassword()) {
+				if (selectedAppUser.getPassword().equals(String.valueOf(passwordTextField.getPassword()))) {
+					usernameForLogin = selectedAppUser.getUsername();
+					// Log dialog closed event.
+					BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
+					dialog.dispose();
+				}
+				else {
+					// Log incorrect password error message.
+					BPCC_Logger.logErrorMessage(classNameForLogger, logMessage_incorrectPassword, 0);
+				}
+			}
+			else {
+				usernameForLogin = selectedAppUser.getUsername();
+				// Log dialog closed event.
+				BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
+				dialog.dispose();
+			}
 		}
-		else if (inc_closeCondition == 0) {		// Exit application.
-			// TODO:  BPCC_Hub.end() should be called on return.
+		else if (inc_closeCondition == 0) {
+			// Exit application, usernameForLogin will be left null.
+			// Log dialog closed event.
+			BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
+			dialog.dispose();
 		}
-		
-		// Log dialog closed event.
-		BPCC_Logger.logInfoMessage(classNameForLogger, logMessage_dialogClosed);
-		dialog.dispose();
 	}
 	
 	private JPanel buildMainPanel() {
@@ -279,7 +324,7 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 		return buttonPanel;
 	}
 	
-	private String[] getusernameList() {
+	private String[] getUsernameList() {
 		String[] usernameList = new String[BPCC_Util.getAppUserList().size()];
 		for (int i = 0; i < usernameList.length; i++) {
 			usernameList[i] = BPCC_Util.getAppUserList().get(i).getUsername();
