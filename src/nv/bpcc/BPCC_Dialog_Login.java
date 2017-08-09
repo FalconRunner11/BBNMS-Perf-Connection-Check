@@ -147,6 +147,7 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_loginButtonClicked);
 			closeDialog(1);
 		}
+		
 		else if (e.getSource() == cancelButton) {
 			// Log user interaction with cancelButton.
 			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_cancelButtonClicked);
@@ -215,6 +216,7 @@ public class BPCC_Dialog_Login extends JOptionPane implements ActionListener {
 				BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_xButtonClicked);
 				closeDialog(0);
 			}
+			
 			public void windowClosed(WindowEvent wE) {
 				// Do nothing once dialog is closed.
 			}

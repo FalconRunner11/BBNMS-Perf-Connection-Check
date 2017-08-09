@@ -95,6 +95,7 @@ public class BPCC_Tester implements ActionListener {
 			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_testButtonClicked);
 			executeTest();
 		}
+		
 		else if (e.getSource() == exitButton) {
 			BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_exitButtonClicked);
 			closeFrame();
@@ -138,6 +139,7 @@ public class BPCC_Tester implements ActionListener {
 				BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_xButtonClicked);
 				closeFrame();
 			}
+			
 			public void windowClosed(WindowEvent wE) {
 				// Do nothing once testFrame is closed.
 			}

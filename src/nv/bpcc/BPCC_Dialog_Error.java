@@ -144,6 +144,7 @@ public class BPCC_Dialog_Error extends JOptionPane implements ActionListener {
 				BPCC_Logger.logDebugMessage(classNameForLogger, logMessage_xButtonClicked);
 				closeDialog();
 			}
+			
 			public void windowClosed(WindowEvent wE) {
 				// Do nothing once dialog is closed.
 			}
